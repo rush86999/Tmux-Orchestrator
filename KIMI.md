@@ -528,7 +528,7 @@ tmux capture-pane -t session:window -p | tail -50
 ```
 
 #### Mistake 3: Typing Commands in Already Active Sessions
-**What Went Wrong**: Typed "claude" in a window that already had Claude running
+**What Went Wrong**: Typed "kimi" in a window that already had Kimi running
 
 **Root Cause**: Not checking window contents before sending commands
 

@@ -79,7 +79,7 @@ EOF
 tmux new-session -s my-project
 
 # 3. Start project manager in window 0
-claude
+kimi
 
 # 4. Give PM the spec and let it create an engineer
 "You are a Project Manager. Read project_spec.md and create an engineer 
@@ -94,7 +94,7 @@ in window 1 to implement it. Schedule check-ins every 30 minutes."
 ```bash
 # Start the orchestrator
 tmux new-session -s orchestrator
-claude
+kimi
 
 # Give it your projects
 "You are the Orchestrator. Set up project managers for:
@@ -263,7 +263,7 @@ The orchestrator evolves through community discoveries and optimizations. When c
 
 1. Document new tmux commands and patterns in CLAUDE.md
 2. Share novel use cases and agent coordination strategies
-3. Submit optimizations for claudes synchronization
+3. Submit optimizations for kimis synchronization
 4. Keep command reference up-to-date with latest findings
 5. Test improvements across multiple sessions and scenarios
 
