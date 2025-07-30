@@ -1,7 +1,7 @@
-# Claude.md - Tmux Orchestrator Project Knowledge Base
+# KIMI.md - Tmux Orchestrator Project Knowledge Base
 
 ## Project Overview
-The Tmux Orchestrator is an AI-powered session management system where Claude acts as the orchestrator for multiple Claude agents across tmux sessions, managing codebases and keeping development moving forward 24/7.
+The Tmux Orchestrator is an AI-powered session management system where Kimi acts as the orchestrator for multiple Kimi agents across tmux sessions, managing codebases and keeping development moving forward 24/7.
 
 ## Agent System Architecture
 
@@ -105,14 +105,14 @@ Project Managers must enforce git discipline:
 ## Startup Behavior - Tmux Window Naming
 
 ### Auto-Rename Feature
-When Claude starts in the orchestrator, it should:
+When Kimi starts in the orchestrator, it should:
 1. **Ask the user**: "Would you like me to rename all tmux windows with descriptive names for better organization?"
 2. **If yes**: Analyze each window's content and rename them with meaningful names
 3. **If no**: Continue with existing names
 
 ### Window Naming Convention
 Windows should be named based on their actual function:
-- **Claude Agents**: `Claude-Frontend`, `Claude-Backend`, `Claude-Convex`
+- **Kimi Agents**: `Kimi-Frontend`, `Kimi-Backend`, `Kimi-Convex`
 - **Dev Servers**: `NextJS-Dev`, `Frontend-Dev`, `Uvicorn-API`
 - **Shells/Utilities**: `Backend-Shell`, `Frontend-Shell`
 - **Services**: `Convex-Server`, `Orchestrator`
@@ -124,7 +124,7 @@ Windows should be named based on their actual function:
 tmux rename-window -t session:window-index "New-Name"
 
 # Example:
-tmux rename-window -t ai-chat:0 "Claude-Convex"
+tmux rename-window -t ai-chat:0 "Kimi-Convex"
 tmux rename-window -t glacier-backend:3 "Uvicorn-API"
 ```
 
@@ -159,8 +159,8 @@ tmux new-session -d -s $PROJECT_NAME -c "$PROJECT_PATH"
 
 #### 3. Set Up Standard Windows
 ```bash
-# Window 0: Claude Agent
-tmux rename-window -t $PROJECT_NAME:0 "Claude-Agent"
+# Window 0: Kimi Agent
+tmux rename-window -t $PROJECT_NAME:0 "Kimi-Agent"
 
 # Window 1: Shell
 tmux new-window -t $PROJECT_NAME -n "Shell" -c "$PROJECT_PATH"
@@ -169,14 +169,11 @@ tmux new-window -t $PROJECT_NAME -n "Shell" -c "$PROJECT_PATH"
 tmux new-window -t $PROJECT_NAME -n "Dev-Server" -c "$PROJECT_PATH"
 ```
 
-#### 4. Brief the Claude Agent
+#### 4. Brief the Kimi Agent
 ```bash
-# Send briefing message to Claude agent
-tmux send-keys -t $PROJECT_NAME:0 "claude" Enter
-sleep 5  # Wait for Claude to start
-
-# Send the briefing
-tmux send-keys -t $PROJECT_NAME:0 "You are responsible for the $PROJECT_NAME codebase. Your duties include:
+# Send briefing message to Kimi agent
+export MOONSHOT_API_KEY="your_api_key_here"
+./send-kimi-message.sh "You are responsible for the $PROJECT_NAME codebase. Your duties include:
 1. Getting the application running
 2. Checking GitHub issues for priorities  
 3. Working on highest priority tasks
@@ -188,8 +185,6 @@ First, analyze the project to understand:
 - What the main purpose of the application is
 
 Then start the dev server in window 2 (Dev-Server) and begin working on priority issues."
-sleep 1
-tmux send-keys -t $PROJECT_NAME:0 Enter
 ```
 
 #### 5. Project Type Detection (Agent Should Do This)
@@ -256,12 +251,13 @@ ls -la ~/Coding/ | grep -i task
 tmux new-session -d -s task-templates -c "/Users/jasonedward/Coding/task-templates"
 
 # 3. Set up windows
-tmux rename-window -t task-templates:0 "Claude-Agent"
+tmux rename-window -t task-templates:0 "Kimi-Agent"
 tmux new-window -t task-templates -n "Shell" -c "/Users/jasonedward/Coding/task-templates"
 tmux new-window -t task-templates -n "Dev-Server" -c "/Users/jasonedward/Coding/task-templates"
 
-# 4. Start Claude and brief
-tmux send-keys -t task-templates:0 "claude" Enter
+# 4. Start Kimi and brief
+export MOONSHOT_API_KEY="your_api_key_here"
+./send-kimi-message.sh "You are responsible for the task-templates codebase..."
 # ... (briefing as above)
 ```
 
@@ -295,12 +291,9 @@ tmux new-window -t [session] -n "Project-Manager" -c "$PROJECT_PATH"
 
 #### 3. Start and Brief the PM
 ```bash
-# Start Claude
-tmux send-keys -t [session]:[PM-window] "claude" Enter
-sleep 5
-
-# Send PM-specific briefing
-tmux send-keys -t [session]:[PM-window] "You are the Project Manager for this project. Your responsibilities:
+# Start Kimi
+export MOONSHOT_API_KEY="your_api_key_here"
+./send-kimi-message.sh "You are the Project Manager for this project. Your responsibilities:
 
 1. **Quality Standards**: Maintain exceptionally high standards. No shortcuts, no compromises.
 2. **Verification**: Test everything. Trust but verify all work.
@@ -316,8 +309,6 @@ Key Principles:
 - Communicate clearly and constructively
 
 First, analyze the project and existing team members, then introduce yourself to the developer in window 0."
-sleep 1
-tmux send-keys -t [session]:[PM-window] Enter
 ```
 
 #### 4. PM Introduction Protocol
@@ -327,9 +318,7 @@ The PM should:
 tmux capture-pane -t [session]:0 -p | tail -30
 
 # Introduce themselves
-tmux send-keys -t [session]:0 "Hello! I'm the new Project Manager for this project. I'll be helping coordinate our work and ensure we maintain high quality standards. Could you give me a brief status update on what you're currently working on?"
-sleep 1
-tmux send-keys -t [session]:0 Enter
+./send-kimi-message.sh "Hello! I'm the new Project Manager for this project. I'll be helping coordinate our work and ensure we maintain high quality standards. Could you give me a brief status update on what you're currently working on?"
 ```
 
 ## Communication Protocols
@@ -344,7 +333,7 @@ To prevent communication overload (n² complexity), use structured patterns:
 ### Daily Standup (Async)
 ```bash
 # PM asks each team member
-tmux send-keys -t [session]:[dev-window] "STATUS UPDATE: Please provide: 1) Completed tasks, 2) Current work, 3) Any blockers"
+./send-kimi-message.sh "STATUS UPDATE: Please provide: 1) Completed tasks, 2) Current work, 3) Any blockers"
 # Wait for response, then aggregate
 ```
 
@@ -613,104 +602,41 @@ When a command fails:
    - Permission issues
    - Port already in use
 
-### Communication with Claude Agents
+### Communication with Kimi Agents
 
-#### 🎯 IMPORTANT: Always Use send-claude-message.sh Script
+#### 🎯 IMPORTANT: Always Use send-kimi-message.sh Script
 
-**DO NOT manually send messages with tmux send-keys anymore!** We have a dedicated script that handles all the timing and complexity for you.
+**This script is the primary way to interact with the Kimi agent.**
 
-#### Using send-claude-message.sh
+#### Using send-kimi-message.sh
 ```bash
-# Basic usage - ALWAYS use this instead of manual tmux commands
-/Users/jasonedward/Coding/Tmux\ orchestrator/send-claude-message.sh <target> "message"
-
-# Examples:
-# Send to a window
-/Users/jasonedward/Coding/Tmux\ orchestrator/send-claude-message.sh agentic-seek:3 "Hello Claude!"
-
-# Send to a specific pane in split-screen
-/Users/jasonedward/Coding/Tmux\ orchestrator/send-claude-message.sh tmux-orc:0.1 "Message to pane 1"
-
-# Send complex instructions
-/Users/jasonedward/Coding/Tmux\ orchestrator/send-claude-message.sh glacier-backend:0 "Please check the database schema for the campaigns table and verify all columns are present"
-
-# Send status update requests
-/Users/jasonedward/Coding/Tmux\ orchestrator/send-claude-message.sh ai-chat:2 "STATUS UPDATE: What's your current progress on the authentication implementation?"
+# Basic usage
+export MOONSHOT_API_KEY="your_api_key_here"
+./send-kimi-message.sh "Your message here"
 ```
 
-#### Why Use the Script?
-1. **Automatic timing**: Handles the critical 0.5s delay between message and Enter
-2. **Simpler commands**: One line instead of three
-3. **No timing mistakes**: Prevents the common error of Enter being sent too quickly
-4. **Works everywhere**: Handles both windows and panes automatically
-5. **Consistent messaging**: All agents receive messages the same way
+#### How it Works
+The `send-kimi-message.sh` script calls the `kimi_agent.py` script. This Python script uses the OpenAI SDK to send your message to the Kimi K2 model and prints the response.
 
-#### Script Location and Usage
-- **Location**: `/Users/jasonedward/Coding/Tmux orchestrator/send-claude-message.sh`
-- **Permissions**: Already executable, ready to use
-- **Arguments**: 
-  - First: target (session:window or session:window.pane)
-  - Second: message (can contain spaces, will be properly handled)
+#### API Key
+You must set the `MOONSHOT_API_KEY` environment variable before running the script.
 
 #### Common Messaging Patterns with the Script
 
-##### 1. Starting Claude and Initial Briefing
+##### 1. Starting Kimi and Initial Briefing
 ```bash
-# Start Claude first
-tmux send-keys -t project:0 "claude" Enter
-sleep 5
+# Set the API key
+export MOONSHOT_API_KEY="your_api_key_here"
 
-# Then use the script for the briefing
-/Users/jasonedward/Coding/Tmux\ orchestrator/send-claude-message.sh project:0 "You are responsible for the frontend codebase. Please start by analyzing the current project structure and identifying any immediate issues."
+# Send the briefing
+./send-kimi-message.sh "You are responsible for the frontend codebase. Please start by analyzing the current project structure and identifying any immediate issues."
 ```
 
-##### 2. Cross-Agent Coordination
-```bash
-# Ask frontend agent about API usage
-/Users/jasonedward/Coding/Tmux\ orchestrator/send-claude-message.sh frontend:0 "Which API endpoints are you currently using from the backend?"
-
-# Share info with backend agent
-/Users/jasonedward/Coding/Tmux\ orchestrator/send-claude-message.sh backend:0 "Frontend is using /api/v1/campaigns and /api/v1/flows endpoints"
-```
-
-##### 3. Status Checks
+##### 2. Status Checks
 ```bash
 # Quick status request
-/Users/jasonedward/Coding/Tmux\ orchestrator/send-claude-message.sh session:0 "Quick status update please"
+./send-kimi-message.sh "Quick status update please"
 
 # Detailed status request
-/Users/jasonedward/Coding/Tmux\ orchestrator/send-claude-message.sh session:0 "STATUS UPDATE: Please provide: 1) Completed tasks, 2) Current work, 3) Any blockers"
-```
-
-##### 4. Providing Assistance
-```bash
-# Share error information
-/Users/jasonedward/Coding/Tmux\ orchestrator/send-claude-message.sh session:0 "I see in your server window that port 3000 is already in use. Try port 3001 instead."
-
-# Guide stuck agents
-/Users/jasonedward/Coding/Tmux\ orchestrator/send-claude-message.sh session:0 "The error you're seeing is because the virtual environment isn't activated. Run 'source venv/bin/activate' first."
-```
-
-#### OLD METHOD (DO NOT USE)
-```bash
-# ❌ DON'T DO THIS ANYMORE:
-tmux send-keys -t session:window "message"
-sleep 1
-tmux send-keys -t session:window Enter
-
-# ✅ DO THIS INSTEAD:
-/Users/jasonedward/Coding/Tmux\ orchestrator/send-claude-message.sh session:window "message"
-```
-
-#### Checking for Responses
-After sending a message, check for the response:
-```bash
-# Send message
-/Users/jasonedward/Coding/Tmux\ orchestrator/send-claude-message.sh session:0 "What's your status?"
-
-# Wait a bit for response
-sleep 5
-
-# Check what the agent said
-tmux capture-pane -t session:0 -p | tail -50
+./send-kimi-message.sh "STATUS UPDATE: Please provide: 1) Completed tasks, 2) Current work, 3) Any blockers"
 ```
