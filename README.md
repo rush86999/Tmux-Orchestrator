@@ -1,6 +1,6 @@
 ![Orchestrator Hero](/Orchestrator.png)
 
-**Run AI agents 24/7 while you sleep** - The Tmux Orchestrator enables Claude agents to work autonomously, schedule their own check-ins, and coordinate across multiple projects without human intervention.
+**Run AI agents 24/7 while you sleep** - The Tmux Orchestrator enables Kimi agents to work autonomously, schedule their own check-ins, and coordinate across multiple projects without human intervention.
 
 ## 🤖 Key Capabilities & Autonomous Features
 
@@ -190,24 +190,19 @@ SUCCESS CRITERIA:
 Tmux (terminal multiplexer) is the key enabler because:
 - It persists terminal sessions even when disconnected
 - Allows multiple windows/panes in one session
-- Claude runs in the terminal, so it can control other Claude instances
+- Kimi runs in the terminal, so it can control other Kimi instances
 - Commands can be sent programmatically to any window
 
 ### 💬 Simplified Agent Communication
 
-We now use the `send-claude-message.sh` script for all agent communication:
+We now use the `send-kimi-message.sh` script for all agent communication:
 
 ```bash
-# Send message to any Claude agent
-./send-claude-message.sh session:window "Your message here"
-
-# Examples:
-./send-claude-message.sh frontend:0 "What's your progress on the login form?"
-./send-claude-message.sh backend:1 "The API endpoint /api/users is returning 404"
-./send-claude-message.sh project-manager:0 "Please coordinate with the QA team"
+# Send message to the Kimi agent
+./send-kimi-message.sh "Your message here"
 ```
 
-The script handles all timing complexities automatically, making agent communication reliable and consistent.
+The `send-kimi-message.sh` script calls the `kimi_agent.py` script, which uses the OpenAI SDK to interact with the Kimi K2 model.
 
 ### Scheduling Check-ins
 ```bash
@@ -244,13 +239,23 @@ The orchestrator can share insights between projects:
 - "Authentication is working in Project A, use same pattern in Project B"
 - "Performance issue found in shared library, fix across all projects"
 
+## 🚀 Launching the Agent
+
+To launch the Kimi agent, you need to set the `MOONSHOT_API_KEY` environment variable.
+
+```bash
+export MOONSHOT_API_KEY="your_api_key_here"
+./send-kimi-message.sh "Hello, Kimi!"
+```
+
 ## 📚 Core Files
 
-- `send-claude-message.sh` - Simplified agent communication script
-- `schedule_with_note.sh` - Self-scheduling functionality
-- `tmux_utils.py` - Tmux interaction utilities
-- `CLAUDE.md` - Agent behavior instructions
-- `LEARNINGS.md` - Accumulated knowledge base
+- `kimi_agent.py` - The core script for interacting with the Kimi K2 model.
+- `send-kimi-message.sh` - A script for sending messages to the Kimi agent.
+- `schedule_with_note.sh` - Self-scheduling functionality.
+- `tmux_utils.py` - Tmux interaction utilities.
+- `KIMI.md` - Agent behavior instructions.
+- `LEARNINGS.md` - Accumulated knowledge base.
 
 ## 🤝 Contributing & Optimization
 
